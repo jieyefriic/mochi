@@ -1,0 +1,34 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Build artifacts
+build/
+.build/
+DerivedData/
+*.xcodeproj/
+*.xcworkspace/
+*.app/
+
+# Swift Package Manager
+.swiftpm/
+Package.resolved
+
+# Xcode user data
+xcuserdata/
+*.xcuserstate
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+
+# Local Claude Code working state
+.claude/
