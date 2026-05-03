@@ -33,3 +33,13 @@ xcuserdata/
 # Local Claude Code working state
 .claude/
 CLAUDE.md
+
+# Mochi scratch (PixelLab byte-match cache + batch logs + old candidates)
+*_candidates/
+scripts/.obj_cache/
+scripts/.feed_batch.log
+scripts/.feed_batch.stdout
+
+# Python
+__pycache__/
+*.pyc

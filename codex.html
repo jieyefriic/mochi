@@ -1,0 +1,708 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Mochi · Specimen Codex</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0d12;
+  --bg-2:#0f1218;
+  --panel:#13171f;
+  --panel-2:#181d26;
+  --line:#1f2530;
+  --line-bright:#2a3142;
+  --text:#cfd6e1;
+  --dim:#6a7385;
+  --dimmer:#465062;
+  --accent:#c5f82a;
+
+  /* element colors */
+  --red:#ff5a3c;
+  --blue:#56cdf6;
+  --green:#5af78e;
+  --purple:#c576ff;
+  --gold:#ffb547;
+  --common:#d8c89e;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{
+  background:var(--bg);color:var(--text);
+  font-family:"JetBrains Mono",ui-monospace,monospace;font-size:13px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+body{
+  background-image:
+    radial-gradient(circle at 1px 1px, #1a1f2a 1px, transparent 0),
+    linear-gradient(180deg, #0a0d12 0%, #060810 100%);
+  background-size: 22px 22px, 100% 100%;
+  min-height:100vh;
+}
+img{image-rendering:pixelated;image-rendering:crisp-edges}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+
+body::after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:50;
+  background: repeating-linear-gradient(0deg, rgba(255,255,255,0.012) 0 1px, transparent 1px 3px);
+}
+
+/* ───────── shell ───────── */
+.shell{max-width:1200px;margin:0 auto;padding:48px 32px 96px}
+
+.head{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:28px;
+  gap:24px;flex-wrap:wrap;
+}
+.title{font-family:"VT323",monospace;font-size:64px;line-height:0.9;letter-spacing:1px}
+.title .dot{color:var(--accent)}
+.title em{
+  font-family:"JetBrains Mono",monospace;font-style:normal;
+  font-size:13px;color:var(--accent);letter-spacing:.18em;display:block;
+  margin-bottom:10px;text-transform:uppercase;
+}
+.head .meta{
+  text-align:right;font-size:11px;letter-spacing:.12em;color:var(--dim);
+  text-transform:uppercase;
+}
+.head .meta b{color:var(--text);font-weight:500}
+.head .meta .pulse{
+  display:inline-block;width:8px;height:8px;border-radius:50%;
+  background:var(--accent);margin-right:6px;vertical-align:middle;
+  box-shadow:0 0 8px var(--accent);
+  animation:pulse 1.4s infinite;
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+.intro{font-size:12px;color:var(--dim);max-width:720px;margin-bottom:42px;line-height:1.7}
+
+/* ───────── section heading ───────── */
+.section-head{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  margin-bottom:20px;border-bottom:1px dashed var(--line);padding-bottom:10px;
+}
+.section-head h2{
+  font-family:"VT323",monospace;font-size:30px;letter-spacing:1px;
+  color:var(--text);font-weight:400;
+}
+.section-head .note{font-size:10px;letter-spacing:.18em;color:var(--dimmer);text-transform:uppercase}
+
+/* ───────── inspector (Section 1) ───────── */
+.inspector{
+  display:grid;grid-template-columns: 460px 1fr;gap:32px;
+  background:var(--panel);border:1px solid var(--line);
+  padding:28px;margin-bottom:64px;
+  position:relative;
+}
+.inspector::before{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:var(--tone, var(--dim));
+  box-shadow:0 0 12px color-mix(in srgb, var(--tone, var(--dim)) 60%, transparent);
+  transition:background .2s, box-shadow .2s;
+}
+
+/* big sprite stage */
+.big-stage{
+  position:relative;height:404px;
+  background:
+    radial-gradient(ellipse at center bottom,
+      color-mix(in srgb, var(--tone, var(--dim)) 22%, transparent) 0%,
+      transparent 60%),
+    linear-gradient(180deg, #0b0e15 0%, var(--panel-2) 100%);
+  border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+.big-stage::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(transparent 0 23px, rgba(255,255,255,0.018) 23px 24px);
+  background-size:100% 24px;
+}
+.big-stage::after{
+  content:"";position:absolute;left:50%;bottom:46px;transform:translateX(-50%);
+  width:280px;height:22px;border-radius:50%;
+  background:radial-gradient(ellipse, color-mix(in srgb, var(--tone, var(--dim)) 35%, transparent) 0%, transparent 75%);
+  filter:blur(3px);
+}
+.big-stage img{
+  width:336px;height:336px;
+  filter:drop-shadow(0 0 32px color-mix(in srgb, var(--tone, var(--dim)) 35%, transparent));
+  position:relative;z-index:2;
+  cursor:pointer;
+  transition:transform .2s;
+}
+.big-stage img:hover{transform:scale(1.04)}
+.big-stage .play-hint{
+  position:absolute;left:50%;bottom:14px;transform:translateX(-50%);
+  font-size:9.5px;letter-spacing:.2em;color:var(--dim);
+  text-transform:uppercase;z-index:3;pointer-events:none;
+  opacity:.6;transition:opacity .2s;
+}
+.big-stage:hover .play-hint{opacity:1}
+.big-stage.playing .play-hint{color:var(--accent);opacity:1}
+.big-stage.playing .play-hint::before{content:"▶ "}
+.big-stage:not(.playing) .play-hint::before{content:"▷ "}
+
+.motion-buttons{
+  position:absolute;right:14px;bottom:10px;z-index:3;
+  display:flex;gap:6px;
+}
+.motion-btn{
+  font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--text);
+  padding:5px 10px;border:1px solid var(--line);
+  background:rgba(0,0,0,.4);transition:all .15s;
+}
+.motion-btn:hover{
+  border-color:var(--tone, var(--accent));color:var(--tone, var(--accent));
+}
+.motion-btn.disabled{
+  color:var(--dimmer);border-color:var(--line);cursor:not-allowed;
+  text-decoration:line-through;text-decoration-color:var(--dimmer);
+}
+.motion-btn.playing{
+  background:var(--tone, var(--accent));color:var(--bg);border-color:var(--tone, var(--accent));
+}
+.big-stage .empty-msg{
+  position:relative;z-index:2;font-size:11px;color:var(--dimmer);
+  letter-spacing:.16em;text-transform:uppercase;font-family:"VT323",monospace;font-size:18px;
+}
+
+/* selectors */
+.controls{display:flex;flex-direction:column;gap:18px;justify-content:space-between}
+.ctrl-row{display:flex;flex-direction:column;gap:8px}
+.ctrl-row label{
+  font-size:9.5px;letter-spacing:.22em;color:var(--dim);text-transform:uppercase;
+}
+.seg-row{display:flex;flex-wrap:wrap;gap:4px}
+.seg{
+  font-size:11px;letter-spacing:.08em;color:var(--dim);
+  padding:8px 12px;border:1px solid var(--line);
+  text-transform:uppercase;transition:all .15s;background:transparent;
+  font-family:"JetBrains Mono",monospace;
+}
+.seg:hover{border-color:var(--line-bright);color:var(--text)}
+.seg.active{
+  background:var(--text);color:var(--bg);border-color:var(--text);
+  box-shadow:0 0 8px color-mix(in srgb, var(--text) 30%, transparent);
+}
+
+.readout{
+  border-top:1px dashed var(--line);padding-top:14px;
+  display:grid;grid-template-columns:repeat(2,1fr);gap:6px 18px;font-size:11px;
+}
+.readout .k{color:var(--dim);text-transform:uppercase;letter-spacing:.14em;font-size:9.5px}
+.readout .v{color:var(--text);font-family:"VT323",monospace;font-size:18px;line-height:1}
+.readout .v.tone{color:var(--tone, var(--accent))}
+
+/* ───────── matrix (Section 2) ───────── */
+.matrix-section{
+  display:grid;grid-template-columns:84px 1fr;gap:24px;
+  background:var(--panel);border:1px solid var(--line);padding:24px;
+}
+
+.stage-tabs{
+  display:flex;flex-direction:column;gap:4px;
+  border-right:1px solid var(--line);padding-right:20px;
+}
+.stage-tabs .tab-label{
+  font-size:9.5px;letter-spacing:.22em;color:var(--dim);
+  text-transform:uppercase;margin-bottom:8px;
+}
+.stage-tab{
+  text-align:right;padding:10px 12px;
+  font-family:"VT323",monospace;font-size:18px;letter-spacing:1px;
+  color:var(--dim);border-right:2px solid transparent;transition:all .15s;
+}
+.stage-tab .stg-num{display:inline-block;width:22px;text-align:right}
+.stage-tab .stg-name{font-size:13px;letter-spacing:.06em;color:var(--dimmer);font-family:"JetBrains Mono",monospace;}
+.stage-tab:hover{color:var(--text)}
+.stage-tab.active{
+  color:var(--accent);border-right-color:var(--accent);
+  background:linear-gradient(90deg, transparent, rgba(197,248,42,0.06));
+}
+.stage-tab.active .stg-name{color:var(--text)}
+
+.matrix-pane{display:flex;flex-direction:column;gap:14px}
+.matrix-pane .pane-head{
+  display:flex;justify-content:space-between;align-items:baseline;
+  border-bottom:1px dashed var(--line);padding-bottom:10px;
+}
+.matrix-pane .pane-head .nm{
+  font-family:"VT323",monospace;font-size:24px;color:var(--accent);letter-spacing:1px;
+}
+.matrix-pane .pane-head .desc{font-size:11px;color:var(--dim);letter-spacing:.06em;font-style:italic}
+
+.col-headers{
+  display:grid;grid-template-columns:64px repeat(5, 1fr);gap:8px;
+  font-size:9.5px;letter-spacing:.18em;color:var(--dim);
+  text-transform:uppercase;padding:0 4px;
+}
+.col-headers span:first-child{}
+.col-headers span{text-align:center}
+
+.matrix-grid{display:grid;grid-template-columns:64px repeat(5, 1fr);gap:8px}
+.row-label{
+  font-family:"VT323",monospace;font-size:18px;letter-spacing:1px;
+  color:var(--tone, var(--text));align-self:center;text-align:right;padding-right:6px;
+}
+.cell{
+  background:linear-gradient(180deg, transparent 0%, color-mix(in srgb, var(--tone, var(--dim)) 8%, transparent) 100%);
+  border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+  aspect-ratio:1;
+  position:relative;
+  transition:border-color .15s;
+}
+.cell:hover{border-color:var(--line-bright)}
+.cell img{
+  width:80%;height:80%;object-fit:contain;
+  filter:drop-shadow(0 0 10px color-mix(in srgb, var(--tone, var(--dim)) 30%, transparent));
+}
+.cell.empty{border-style:dashed;opacity:.4}
+.cell.empty .ph{font-family:"VT323",monospace;font-size:24px;color:var(--dimmer)}
+
+/* row tone hooks */
+.row[data-color="red"]    {--tone:var(--red)}
+.row[data-color="blue"]   {--tone:var(--blue)}
+.row[data-color="green"]  {--tone:var(--green)}
+.row[data-color="purple"] {--tone:var(--purple)}
+.row[data-color="gold"]   {--tone:var(--gold)}
+.row[data-color="common"] {--tone:var(--common)}
+
+.inspector[data-tone="red"]    {--tone:var(--red)}
+.inspector[data-tone="blue"]   {--tone:var(--blue)}
+.inspector[data-tone="green"]  {--tone:var(--green)}
+.inspector[data-tone="purple"] {--tone:var(--purple)}
+.inspector[data-tone="gold"]   {--tone:var(--gold)}
+.inspector[data-tone="common"] {--tone:var(--common)}
+
+/* ───────── footer ───────── */
+.foot{
+  margin-top:64px;padding-top:18px;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;font-size:10px;
+  letter-spacing:.18em;color:var(--dimmer);text-transform:uppercase;
+  flex-wrap:wrap;gap:12px;
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <header class="head">
+    <h1 class="title">
+      <em>specimen archive</em>
+      mochi<span class="dot">·</span>dex
+    </h1>
+    <div class="meta">
+      <span class="pulse"></span><b>5 × 5</b> grid · 7 stages<br>
+      build · v0.2<br>
+      96 × 96 px · low top-down
+    </div>
+  </header>
+
+  <p class="intro">
+    Every specimen Mochi may hatch into is decomposed into three independent
+    axes — <b>color</b> (element coat), <b>species</b> (body archetype) and
+    <b>stage</b> (life cycle). Inspect a single combination above; browse the
+    full matrix below.
+  </p>
+
+  <!-- Section 1: Inspector ──────────────────────────────────── -->
+  <div class="section-head">
+    <h2>Specimen Inspector</h2>
+    <span class="note">pick stage · color · species</span>
+  </div>
+
+  <section class="inspector" id="inspector" data-tone="red">
+    <div class="big-stage" id="big-stage">
+      <img id="big-sprite" src="" alt="">
+      <span class="play-hint">click to play idle</span>
+      <div class="motion-buttons">
+        <button class="motion-btn" id="btn-feed" title="play feed reaction once">
+          ⚡ feed
+        </button>
+      </div>
+    </div>
+    <div class="controls">
+      <div class="ctrl-row">
+        <label>Stage</label>
+        <div class="seg-row" id="seg-stage"></div>
+      </div>
+      <div class="ctrl-row">
+        <label>Color · Element</label>
+        <div class="seg-row" id="seg-color"></div>
+      </div>
+      <div class="ctrl-row">
+        <label>Species · Line</label>
+        <div class="seg-row" id="seg-species"></div>
+      </div>
+      <div class="readout">
+        <span class="k">Catalog</span>     <span class="v" id="r-cat">—</span>
+        <span class="k">Stage</span>       <span class="v" id="r-stage">—</span>
+        <span class="k">Element</span>     <span class="v tone" id="r-element">—</span>
+        <span class="k">Species</span>     <span class="v" id="r-species">—</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: Matrix ────────────────────────────────────── -->
+  <div class="section-head">
+    <h2>Evolution Matrix</h2>
+    <span class="note">stage tab → 5 × 5 colors × species</span>
+  </div>
+
+  <section class="matrix-section">
+    <nav class="stage-tabs" id="stage-tabs">
+      <span class="tab-label">stage</span>
+    </nav>
+    <div class="matrix-pane">
+      <div class="pane-head">
+        <span class="nm" id="m-stage-name">—</span>
+        <span class="desc" id="m-stage-desc">—</span>
+      </div>
+      <div class="col-headers" id="col-headers"></div>
+      <div class="matrix-grid" id="matrix-grid"></div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <span>mochi · dex · v0.2</span>
+    <span>local archive · no telemetry</span>
+    <span>96 × 96 px sprites</span>
+  </footer>
+</div>
+
+<script>
+// ─── data ────────────────────────────────────────────────────
+const STAGES = [
+  { num:0, name:"COMMON",     desc:"shared starting form",                 src:c=>"./assets/egg_common.png" },
+  { num:1, name:"ELEMENTAL",  desc:"element-aligned egg",                  src:c=>EGG_S1[c] },
+  { num:2, name:"CRACKING",   desc:"hatch-imminent, glowing through cracks", src:c=>`./assets/cracking/${c}.png` },
+  { num:3, name:"HATCHLING",  desc:"newborn, eggshell still on its head",  src:(c,sp)=>`./assets/${c}/${sp.stages[0].toLowerCase()}.png` },
+  { num:4, name:"JUVENILE",   desc:"growing into its silhouette",          src:(c,sp)=>`./assets/${c}/${sp.stages[1].toLowerCase()}.png` },
+  { num:5, name:"ADULT",      desc:"sleek and capable",                    src:(c,sp)=>`./assets/${c}/${sp.stages[2].toLowerCase()}.png` },
+  { num:6, name:"ULTIMATE",   desc:"primordial god-tier final form",       src:(c,sp)=>`./assets/${c}/${sp.stages[3].toLowerCase()}.png` },
+];
+
+const EGG_S1 = {
+  red:    "./assets/egg_idle.png",
+  blue:   "./assets/egg_blue.png",
+  green:  "./assets/egg_green.png",
+  purple: "./assets/egg_purple.png",
+  gold:   "./assets/egg_gold.png",
+};
+
+const COLORS = [
+  { color:"red",    element:"Magma"  },
+  { color:"blue",   element:"Frost"  },
+  { color:"green",  element:"Toxin"  },
+  { color:"purple", element:"Arcane" },
+  { color:"gold",   element:"Solar"  },
+];
+
+const SPECIES = [
+  { line:"DRAKKIN", stages:["DRAKLING","DRAKWHELP","DRAKWARDEN","DRAKON"] },
+  { line:"MOCHIMA", stages:["MOCHILET","MOCHINIX","MOCHILORD","MOCHIAVATAR"] },
+  { line:"AVIORN",  stages:["PIP","FLEDGE","TALONGLYPH","SKYLORD"] },
+  { line:"FELIQ",   stages:["FELIKIT","FELISPROUT","FELISABER","FELIMYTHOS"] },
+  { line:"MAGUS",   stages:["SIGIL","ACOLYTE","ARCHMAGE","AEONMAGE"] },
+];
+
+function spriteName(stage, color, species) {
+  // Returns the human-readable name of a specific (stage, color, species) cell.
+  if (stage.num === 0) return "COMMON";
+  if (stage.num === 1) return COLORS.find(c=>c.color===color).element.toUpperCase();
+  if (stage.num === 2) return "CRACKING";
+  return species.stages[stage.num - 3];
+}
+
+function spriteSrc(stage, color, species) {
+  // Returns the asset path. For stages 0/1/2 the species is irrelevant.
+  if (stage.src.length === 1) return stage.src(color);
+  return stage.src(color, species);
+}
+
+// For animation playback. Returns the folder containing frame_0..frame_8.png.
+// Returns null if no anim exists for that combination (S0 currently).
+function animDir(stage, color, species) {
+  switch (stage.num) {
+    case 0: return "./assets/common/idle";              // S0 common idle
+    case 1: return `./assets/anim/${color}`;            // S1 elemental egg idle
+    case 2: return `./assets/cracking_anim/${color}`;   // S2 cracking idle
+    default:                                            // S3-S6 species + color
+      return `./assets/${color}/${species.stages[stage.num - 3].toLowerCase()}/idle`;
+  }
+}
+
+// Feed reaction folder. Same naming as static asset slug under anim_feed/.
+function feedDir(stage, color, species) {
+  switch (stage.num) {
+    case 0: return "./assets/common/feed";
+    case 1: return `./assets/anim_feed/${color}`;
+    case 2: return `./assets/anim_feed_cracking/${color}`;
+    default:
+      const slug = species.stages[stage.num - 3].toLowerCase();
+      return `./assets/anim_feed/${color}_${slug}`;
+  }
+}
+
+const FRAME_COUNT = 9;
+const FRAME_MS = 110;
+const TL_FRAME_MS = 130;
+
+// ─── inspector state ─────────────────────────────────────────
+const state = { stage: STAGES[3], color: "red", species: SPECIES[0] };
+
+function makeSeg(parentId, items, axis, currentValue, getLabel, onClick) {
+  const parent = document.getElementById(parentId);
+  parent.innerHTML = "";
+  items.forEach(it => {
+    const b = document.createElement("button");
+    b.className = "seg" + (currentValue === axis(it) ? " active" : "");
+    b.textContent = getLabel(it);
+    b.onclick = () => { onClick(it); };
+    parent.appendChild(b);
+  });
+}
+
+// Inspector animation handle — set when playing, null when static.
+let inspectorAnim = null;
+function stopInspectorAnim() {
+  if (inspectorAnim) {
+    clearInterval(inspectorAnim);
+    inspectorAnim = null;
+  }
+  document.getElementById("big-stage").classList.remove("playing");
+}
+
+function startInspectorAnim() {
+  stopInspectorAnim();
+  const dir = animDir(state.stage, state.color, state.species);
+  if (!dir) return;  // S0 has no anim
+  const probe = new Image();
+  probe.onload = () => {
+    const img = document.getElementById("big-sprite");
+    let f = 0;
+    document.getElementById("big-stage").classList.add("playing");
+    inspectorAnim = setInterval(() => {
+      f = (f + 1) % FRAME_COUNT;
+      img.src = `${dir}/frame_${f}.png`;
+    }, FRAME_MS);
+  };
+  probe.onerror = () => { /* anim not ready, stay static */ };
+  probe.src = `${dir}/frame_0.png`;
+}
+
+function renderInspector() {
+  stopInspectorAnim();  // any selector change stops playback
+
+  // Buttons
+  makeSeg(
+    "seg-stage", STAGES,
+    s => s.num, state.stage.num,
+    s => `S${s.num} ${s.name}`,
+    s => { state.stage = s; renderInspector(); }
+  );
+  makeSeg(
+    "seg-color", COLORS,
+    c => c.color, state.color,
+    c => c.element,
+    c => { state.color = c.color; renderInspector(); }
+  );
+  makeSeg(
+    "seg-species", SPECIES,
+    sp => sp.line, state.species.line,
+    sp => sp.line.toLowerCase(),
+    sp => { state.species = sp; renderInspector(); }
+  );
+
+  // Stage 0/1/2 are color-driven, species-agnostic — visually grey out species selector
+  const speciesRow = document.getElementById("seg-species").parentElement;
+  speciesRow.style.opacity = state.stage.num >= 3 ? 1 : 0.45;
+
+  // Big sprite + readout
+  const inspector = document.getElementById("inspector");
+  inspector.dataset.tone = state.color;
+
+  const img = document.getElementById("big-sprite");
+  img.src = spriteSrc(state.stage, state.color, state.species);
+  img.alt = spriteName(state.stage, state.color, state.species);
+  img.style.display = "";
+  img.onerror = () => {
+    img.style.display = "none";
+    if (!document.querySelector(".big-stage .empty-msg")) {
+      const msg = document.createElement("div");
+      msg.className = "empty-msg";
+      msg.textContent = "( specimen not yet observed )";
+      document.getElementById("big-stage").appendChild(msg);
+    }
+  };
+  img.onload = () => {
+    const m = document.querySelector(".big-stage .empty-msg");
+    if (m) m.remove();
+  };
+
+  document.getElementById("r-cat").textContent =
+    `№ ${String(STAGES.indexOf(state.stage) + 1).padStart(2,"0")}-${state.color.charAt(0).toUpperCase()}-${state.species.line.charAt(0)}`;
+  document.getElementById("r-stage").textContent   = `S${state.stage.num} ${state.stage.name}`;
+  document.getElementById("r-element").textContent = COLORS.find(c=>c.color===state.color).element;
+  document.getElementById("r-species").textContent = state.stage.num >= 3
+    ? state.species.line
+    : "—";
+
+  // Probe whether feed anim is bundled for this combo; gray out button if not.
+  const btn = document.getElementById("btn-feed");
+  btn.classList.remove("disabled");
+  const dir = feedDir(state.stage, state.color, state.species);
+  if (!dir) {
+    btn.classList.add("disabled");
+  } else {
+    const probe = new Image();
+    probe.onerror = () => btn.classList.add("disabled");
+    probe.src = `${dir}/frame_0.png`;
+  }
+}
+
+// Click on big sprite toggles idle animation playback.
+document.getElementById("big-sprite").addEventListener("click", () => {
+  if (inspectorAnim) stopInspectorAnim();
+  else startInspectorAnim();
+});
+
+// ─── Feed playback (one-shot) ────────────────────────────────
+let feedTimer = null;
+function playFeedOnce() {
+  // Cancel any in-flight feed and stop idle.
+  if (feedTimer) { clearInterval(feedTimer); feedTimer = null; }
+  stopInspectorAnim();
+
+  const dir = feedDir(state.stage, state.color, state.species);
+  const btn = document.getElementById("btn-feed");
+  if (!dir) return;
+
+  const probe = new Image();
+  probe.onload = () => {
+    const img = document.getElementById("big-sprite");
+    let f = 0;
+    btn.classList.add("playing");
+    document.getElementById("big-stage").classList.add("playing");
+    feedTimer = setInterval(() => {
+      f += 1;
+      if (f >= FRAME_COUNT) {
+        clearInterval(feedTimer); feedTimer = null;
+        btn.classList.remove("playing");
+        document.getElementById("big-stage").classList.remove("playing");
+        // Settle back to static after the one-shot.
+        img.src = spriteSrc(state.stage, state.color, state.species);
+        return;
+      }
+      img.src = `${dir}/frame_${f}.png`;
+    }, FRAME_MS);
+    img.src = `${dir}/frame_0.png`;
+  };
+  probe.onerror = () => {
+    btn.classList.add("disabled");
+    setTimeout(() => btn.classList.remove("disabled"), 1500);
+  };
+  probe.src = `${dir}/frame_0.png`;
+}
+
+document.getElementById("btn-feed").addEventListener("click", (e) => {
+  e.stopPropagation();
+  playFeedOnce();
+});
+
+// ─── matrix state ────────────────────────────────────────────
+const matrixState = { stage: STAGES[3] };
+
+function renderStageTabs() {
+  const tabsEl = document.getElementById("stage-tabs");
+  // keep the "stage" label
+  while (tabsEl.children.length > 1) tabsEl.removeChild(tabsEl.lastChild);
+  STAGES.forEach(s => {
+    const b = document.createElement("button");
+    b.className = "stage-tab" + (s.num === matrixState.stage.num ? " active" : "");
+    b.innerHTML = `<span class="stg-num">S${s.num}</span> <span class="stg-name">${s.name.toLowerCase()}</span>`;
+    b.onclick = () => { matrixState.stage = s; renderMatrix(); };
+    tabsEl.appendChild(b);
+  });
+}
+
+// Active matrix-cell intervals — cleared on each re-render.
+let matrixIntervals = [];
+function clearMatrixIntervals() {
+  matrixIntervals.forEach(clearInterval);
+  matrixIntervals = [];
+}
+
+function renderMatrix() {
+  clearMatrixIntervals();
+  renderStageTabs();
+  const stage = matrixState.stage;
+
+  document.getElementById("m-stage-name").textContent = `S${stage.num} · ${stage.name}`;
+  document.getElementById("m-stage-desc").textContent = stage.desc;
+
+  // Column headers
+  const ch = document.getElementById("col-headers");
+  ch.innerHTML = `<span></span>` + SPECIES.map(sp =>
+    `<span>${sp.line.toLowerCase()}</span>`
+  ).join("");
+
+  // Grid: 5 rows (colors) × (1 row label + 5 cells)
+  const grid = document.getElementById("matrix-grid");
+  grid.innerHTML = "";
+
+  COLORS.forEach((c, ri) => {
+    const labelEl = document.createElement("div");
+    labelEl.className = "row-label";
+    labelEl.textContent = c.element.toLowerCase();
+    labelEl.style.color = `var(--${c.color})`;
+    grid.appendChild(labelEl);
+
+    SPECIES.forEach((sp, ci) => {
+      const cell = document.createElement("div");
+      cell.className = "cell row";
+      cell.dataset.color = c.color;
+      const src = spriteSrc(stage, c.color, sp);
+      const img = document.createElement("img");
+      img.src = src;
+      img.alt = spriteName(stage, c.color, sp);
+      img.onerror = () => {
+        cell.classList.add("empty");
+        img.remove();
+        const ph = document.createElement("div");
+        ph.className = "ph";
+        ph.textContent = "?";
+        cell.appendChild(ph);
+      };
+      cell.appendChild(img);
+      grid.appendChild(cell);
+
+      // Auto-play idle when anim folder exists. Stagger start frame so the
+      // 25 cells don't pulse in unison.
+      const dir = animDir(stage, c.color, sp);
+      if (!dir) return;
+      const probe = new Image();
+      probe.onload = () => {
+        let f = (ri * 5 + ci) % FRAME_COUNT;
+        const interval = setInterval(() => {
+          f = (f + 1) % FRAME_COUNT;
+          img.src = `${dir}/frame_${f}.png`;
+        }, TL_FRAME_MS);
+        matrixIntervals.push(interval);
+      };
+      probe.src = `${dir}/frame_0.png`;
+    });
+  });
+}
+
+// ─── init ───────────────────────────────────────────────────
+renderInspector();
+renderMatrix();
+</script>
+</body>
+</html>
